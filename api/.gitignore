@@ -1,0 +1,7 @@
+node_modules/
+build/
+*.test
+*.dev
+*.log
+*.error
+.env
