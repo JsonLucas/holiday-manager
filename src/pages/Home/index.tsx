@@ -56,25 +56,27 @@ export function HomePage() {
             <Header />
             <Flex w='100%' h='auto'>
                 <VStack w='100%' m='100px auto'>
-                    <Calendar />
                     {!holidays && <Loading />}
-                    {holidays && <VStack mt='20px' w={['95%', '80%', '65%', '50%']} maxH={['35vh', '40vh', '40vh', '45vh']} overflowY='scroll'>
-                        {holidays.length === 0 && <Text fontStyle='italic' fontSize='20px' textAlign='center'>Holiday list is empty. . .</Text>}
-                        <Flex hidden={massDeleteHidden} mb='10px' h='10px' w='100%' justifyContent='flex-start'>
-                            <IoIosTrash cursor='pointer' title='Delete Holiday' onClick={handleMassDelete} color='red' size={25} />
-                        </Flex>
-                        {holidays.map((item: IHoliday) =>
-                            <Holiday
-                                key={`${item.user_id}-${item.id}`}
-                                handleSelectHoliday={handleSelectHoliday}
-                                id={item.id}
-                                coordinates={item.coordinates}
-                                title={item.title}
-                                description={item.description}
-                                date={item.date}
-                            />
-                        )}
-                    </VStack>}
+                    {holidays && <>
+                        <Calendar previousHolidays={holidays.map((item: IHoliday) => item.date)} />
+                        <VStack mt='20px' w={['95%', '80%', '65%', '50%']} maxH={['35vh', '40vh', '40vh', '45vh']} overflowY='scroll'>
+                            {holidays.length === 0 && <Text fontStyle='italic' fontSize='20px' textAlign='center'>Holiday list is empty. . .</Text>}
+                            <Flex hidden={massDeleteHidden} mb='10px' h='10px' w='100%' justifyContent='flex-start'>
+                                <IoIosTrash cursor='pointer' title='Delete Holiday' onClick={handleMassDelete} color='red' size={25} />
+                            </Flex>
+                            {holidays.map((item: IHoliday) =>
+                                <Holiday
+                                    key={`${item.user_id}-${item.id}`}
+                                    handleSelectHoliday={handleSelectHoliday}
+                                    id={item.id}
+                                    coordinates={item.coordinates}
+                                    title={item.title}
+                                    description={item.description}
+                                    date={item.date}
+                                />
+                            )}
+                        </VStack>
+                    </>}
                 </VStack>
             </Flex >
         </>

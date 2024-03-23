@@ -5,9 +5,9 @@ import { ITask } from "../../../interfaces/holiday";
 import { ModalTaskDetails } from "../../Modals/Task/ModalTaskDetails";
 import { ModalDelete } from "../ModalDelete";
 
-type props = ITask & { handleSelectTask: (event: React.ChangeEvent<HTMLInputElement>) => void };
+type props = ITask & { handleSelectTask: (event: React.ChangeEvent<HTMLInputElement>) => void, taskList: ITask[] };
 
-export function Task({ title, description, id, holiday_id, handleSelectTask }: props) {
+export function Task({ title, description, id, holiday_id, handleSelectTask, taskList }: props) {
     const [isModalDetailsOpen, setIsModalDetailsOpen] = useState(false);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [isVisualization, setIsVisualization] = useState(false);
@@ -27,6 +27,7 @@ export function Task({ title, description, id, holiday_id, handleSelectTask }: p
             </HStack>
             <ModalTaskDetails 
                 data={{ title, description, id, holiday_id }} 
+                taskList={taskList}
                 isOpen={isModalDetailsOpen} 
                 onClose={() => setIsModalDetailsOpen(false)} 
                 isVisualization={isVisualization}

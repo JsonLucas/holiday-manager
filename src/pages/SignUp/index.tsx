@@ -12,6 +12,7 @@ import { IoIosAt, IoIosLock, IoIosPerson } from "react-icons/io";
 import { Header } from "../../components/Header";
 import { useToast } from "../../hooks/useToast";
 import * as z from 'zod';
+import { ErrorLabel } from "../../components/ErrorLabel";
 
 type Fields = z.infer<typeof signUpSchema>;
 
@@ -35,7 +36,17 @@ export function SignUp() {
             if (e.response) {
                 const { data } = e.response;
                 setError('email', { message: data.message });
-            }
+                genericToast({
+                    title: "Error.",
+                    description: data.message,
+                    status: "error"
+                });
+            } else
+            genericToast({
+                title: "Error.",
+                description: "We got touble to create your account.",
+                status: "error"
+            });
         }
     }
 
@@ -66,9 +77,10 @@ export function SignUp() {
                             placeholder="Name" 
                             color='black'
                             mb='10px' 
+                            data-test="name-input-signup"
                         />
                     </InputGroup>
-                    {errors.name && <Text w='100%' textAlign='left' color='darkred'>{errors.name.message}</Text>}
+                    {errors.name && <ErrorLabel error={errors.name.message} />}
                     <InputGroup>
                         <InputLeftElement pointerEvents='none'>
                             <IoIosAt size={25} color='black' />
@@ -80,9 +92,10 @@ export function SignUp() {
                             placeholder="Email" 
                             color='black'
                             mb='10px' 
+                            data-test="email-input-signup"
                         />
                     </InputGroup>
-                    {errors.email && <Text w='100%' textAlign='left'  color='darkred'>{errors.email.message}</Text>}
+                    {errors.email && <ErrorLabel error={errors.email.message} />}
                     <InputGroup>
                         <InputLeftElement pointerEvents='none'>
                             <IoIosLock size={25} color='black' />
@@ -94,10 +107,11 @@ export function SignUp() {
                             placeholder="Password" 
                             color='black'
                             mb='10px' 
+                            data-test="password-input-signup"
                         />
                     </InputGroup>
-                    {errors.password && <Text w='100%' textAlign='left'  color='darkred'>{errors.password.message}</Text>}
-                    <Button disabled={isSubmitting} w='150px' mx='auto' _hover={{ color: 'black', bgColor: 'transparent' }} bgColor='darkgreen' color='white' onClick={handleSubmit(signUp)}>
+                    {errors.password && <ErrorLabel error={errors.password.message} />}
+                    <Button data-test='button-signup' disabled={isSubmitting} w='150px' mx='auto' _hover={{ color: 'black', bgColor: 'transparent' }} bgColor='darkgreen' color='white' onClick={handleSubmit(signUp)}>
                         {!isSubmitting && <>Create Account</>}
                         {isSubmitting && <ThreeDots color="white" />}
                     </Button>

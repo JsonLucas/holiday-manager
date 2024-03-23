@@ -9,6 +9,7 @@ import { SEOHelper } from "../../components/SEOHelper";
 import { IoIosAt, IoIosLock } from "react-icons/io";
 import { Header } from "../../components/Header";
 import { useToast } from "../../hooks/useToast";
+import { ErrorLabel } from "../../components/ErrorLabel";
 
 type Fields = {
 	email: string,
@@ -68,26 +69,28 @@ export function Login() {
 							</InputLeftElement>
 							<Input 
 								{...register('email', { required: "Enter with your email." })} 
+								data-test="email-input-login"
 								variant="flushed" 
 								type='email' 
 								placeholder="Email" 
 								color='black'
 							/>
 						</InputGroup>
-						{errors.email && <Text w='100%' textAlign='left' color='darkred'>{errors.email.message}</Text>}
+						{errors.email && <ErrorLabel error={errors.email.message} />}
 						<InputGroup>
 							<InputLeftElement pointerEvents='none'>
 								<IoIosLock size={25} color='black' />
 							</InputLeftElement>
 							<Input {
 								...register('password', { required: "Enter with your password." })} 
+								data-test="password-input-login"
 								variant="flushed" 
 								type='password' 
 								placeholder="Password" 
 								color='black'
 							/>
 						</InputGroup>
-						{errors.password && <Text w='100%' textAlign='left' color='darkred'>{errors.password.message}</Text>}
+						{errors.password && <ErrorLabel error={errors.password.message} />}
 					</VStack>
 					<Text 
 						w='100%' 
@@ -96,11 +99,12 @@ export function Login() {
 						fontSize='12.5px' 
 						textAlign='right' 
 						cursor='pointer'
+						data-test="forgot-password-label-redirect"
 						onClick={() => navigate("/forgot-password")}
 					>
 						Forgot your password?
 					</Text>
-					<Button w='150px' _hover={{ color: 'black', bgColor: 'transparent' }} mt='20px' mx='auto' bgColor="darkgreen" color='white' onClick={handleSubmit(login)} disabled={isSubmitting}>
+					<Button data-test="button-login" w='150px' _hover={{ color: 'black', bgColor: 'transparent' }} mt='20px' mx='auto' bgColor="darkgreen" color='white' onClick={handleSubmit(login)} disabled={isSubmitting}>
 						{!isSubmitting && <>Login</>}
 						{isSubmitting && <ThreeDots color="white" />}
 					</Button>
@@ -110,6 +114,7 @@ export function Login() {
 						textAlign='center' 
 						textDecor='underline' 
 						cursor='pointer' 
+						data-test="create-account-label-redirect"
 						onClick={() => navigate('/signup')}
 					>
 						Don't have an account yet? Click here!

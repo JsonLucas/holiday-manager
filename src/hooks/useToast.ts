@@ -3,7 +3,7 @@ import { useToast as ChakraUseToast } from "@chakra-ui/react";
 type GenericToast = { 
     title: string, 
     description: string, 
-    status: 'success' | 'error' 
+    status: 'success' | 'error' | 'warning'
 }
 
 export const useToast = () => {

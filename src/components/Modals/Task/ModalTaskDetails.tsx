@@ -9,16 +9,16 @@ import {
     ModalOverlay,
     Textarea,
     VStack,
-    ModalFooter,
-    Text
+    ModalFooter
 } from "@chakra-ui/react";
 import { ModalUpdateTaskProps } from "../../../interfaces/pageProps";
 import { useTask } from "../../../hooks/useTask";
 import { useForm } from "react-hook-form";
 import { useToast } from "../../../hooks/useToast";
+import { ErrorLabel } from "../../ErrorLabel";
 
-export function ModalTaskDetails({ isOpen, onClose, data, isVisualization = true }: ModalUpdateTaskProps) {
-    const { register, handleSubmit, formState: { errors } } = useForm({
+export function ModalTaskDetails({ isOpen, onClose, data, isVisualization = true, taskList }: ModalUpdateTaskProps) {
+    const { register, handleSubmit, formState: { errors }, setError } = useForm({
         defaultValues: {
             title: data.title,
             description: data.description
@@ -28,25 +28,27 @@ export function ModalTaskDetails({ isOpen, onClose, data, isVisualization = true
     const { genericToast } = useToast();
 
     const handleUpdateTask = async (task: any) => {
-        try {
-            await update({ id: data.id, task });
-            genericToast({
-                title: "Task successfuly updated.",
-                description: "Your task was successfuly updated!",
-                status: "success"
-            });
-            onClose();
-        } catch (e: any) {
-            console.log(e);
-            if (e.response) {
-                const { data } = e.response;
+        if (!taskList.some((item) => item.title.toLowerCase().includes(task.title.toLowerCase()))) {
+            try {
+                await update({ id: data.id, task });
                 genericToast({
-                    title: "Error.",
-                    description: data.message,
-                    status: "error"
+                    title: "Task successfuly updated.",
+                    description: "Your task was successfuly updated!",
+                    status: "success"
                 });
+                onClose();
+            } catch (e: any) {
+                console.log(e);
+                if (e.response) {
+                    const { data } = e.response;
+                    genericToast({
+                        title: "Error.",
+                        description: data.message,
+                        status: "error"
+                    });
+                }
             }
-        }
+        } else setError('title', { message: "This title is already taken." });
     }
 
     return (
@@ -58,7 +60,7 @@ export function ModalTaskDetails({ isOpen, onClose, data, isVisualization = true
                 <ModalBody>
                     <VStack>
                         <Input {...register("title", { required: "A title is required." })} disabled={isVisualization} />
-                        {errors.title && <Text color='darkred' fontSize='15px' textAlign='left' w='100%'>{errors.title.message}</Text>}
+                        {errors.title && <ErrorLabel error={errors.title.message ?? ""} />}
                         <Textarea {...register("description")} disabled={isVisualization} rows={3} cols={5} />
                     </VStack>
                 </ModalBody>

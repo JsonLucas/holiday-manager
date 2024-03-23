@@ -74,7 +74,13 @@ export function ModalDelete({ isOpen, onClose, id, isHoliday, taskId }: ModalDel
                     <Text>Do you want to proceed with this action?</Text>
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme="red" onClick={isHoliday ? handleDeleteHoliday : handleDeleteTask}>Delete</Button>&nbsp;
+                    <Button 
+                        data-test='button-confirm-delete' 
+                        colorScheme="red" 
+                        onClick={isHoliday ? handleDeleteHoliday : handleDeleteTask}
+                    >
+                        Delete
+                    </Button>&nbsp;
                     <Button colorScheme="blue" variant="outline" onClick={onClose}>Cancel</Button>
                 </ModalFooter>
             </ModalContent>

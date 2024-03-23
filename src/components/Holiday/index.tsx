@@ -19,12 +19,12 @@ export function Holiday({ title, description, coordinates, date, id, handleSelec
     }
 
     return (
-        <Flex cursor='pointer' p='5px' w='100%' justifyContent="space-between">
+        <Flex data-test={`holiday-${moment(date).format('YYYY-MM-DD')}`} cursor='pointer' p='5px' w='100%' justifyContent="space-between">
             <Checkbox value={id} onChange={handleSelectHoliday} />
             <Text w='100%' textAlign='center' onClick={() => handleOpenVisualization(true)}>{moment(date).format("DD/MM/YYYY")}</Text>
             <HStack spacing={1}>
-                <IoMdCreate title='Update Holiday' onClick={() => handleOpenVisualization(false)} color='grey' size={25} />
-                <IoIosTrash title='Delete Holiday' onClick={() => setIsModalDeleteOpen(true)} color='red' size={25} />
+                <IoMdCreate data-test={`update-holiday-icon-${moment(date).format('YYYY-MM-DD')}`} title='Update Holiday' onClick={() => handleOpenVisualization(false)} color='grey' size={25} />
+                <IoIosTrash data-test={`delete-holiday-icon-${moment(date).format('YYYY-MM-DD')}`} title='Delete Holiday' onClick={() => setIsModalDeleteOpen(true)} color='red' size={25} />
             </HStack>
             <ModalHolidayDetails 
                 data={{ title, description, coordinates, date, id }}
