@@ -59,14 +59,14 @@ export function ModalTaskDetails({ isOpen, onClose, data, isVisualization = true
                 <ModalCloseButton />
                 <ModalBody>
                     <VStack>
-                        <Input {...register("title", { required: "A title is required." })} disabled={isVisualization} />
+                        <Input data-test='update-task-title-input' {...register("title", { required: "A title is required." })} disabled={isVisualization} />
                         {errors.title && <ErrorLabel error={errors.title.message ?? ""} />}
-                        <Textarea {...register("description")} disabled={isVisualization} rows={3} cols={5} />
+                        <Textarea data-test='update-task-description-input' {...register("description")} disabled={isVisualization} rows={3} cols={5} />
                     </VStack>
                 </ModalBody>
                 {!isVisualization &&
                     <ModalFooter>
-                        <Button colorScheme="green" onClick={handleSubmit(handleUpdateTask)}>Update</Button>
+                        <Button data-test="button-update-task" colorScheme="green" onClick={handleSubmit(handleUpdateTask)}>Update</Button>
                     </ModalFooter>
                 }
             </ModalContent>

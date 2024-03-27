@@ -5,10 +5,12 @@ import { IHoliday } from "../../interfaces/holiday";
 import { ModalHolidayDetails } from "../Modals/Holiday/ModalHolidayDetails";
 import { ModalDelete } from "../Modals/ModalDelete";
 import moment from 'moment';
+import { useTask } from "../../hooks/useTask";
 
 type props = Omit<IHoliday, 'user_id'> & { handleSelectHoliday: (event: React.ChangeEvent<HTMLInputElement>) => void }
 
 export function Holiday({ title, description, coordinates, date, id, handleSelectHoliday }: props) {
+    const { tasks } = useTask(id);
     const [isModalDetailsOpen, setIsModalDetailsOpen] = useState(false);
     const [isVisualization, setIsVisualization] = useState(false);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
@@ -27,7 +29,7 @@ export function Holiday({ title, description, coordinates, date, id, handleSelec
                 <IoIosTrash data-test={`delete-holiday-icon-${moment(date).format('YYYY-MM-DD')}`} title='Delete Holiday' onClick={() => setIsModalDeleteOpen(true)} color='red' size={25} />
             </HStack>
             <ModalHolidayDetails 
-                data={{ title, description, coordinates, date, id }}
+                data={{ title, description, coordinates, date, id, tasks: tasks || [] }}
                 isOpen={isModalDetailsOpen} 
                 onClose={() => setIsModalDetailsOpen(false)} 
                 isVisualization={isVisualization}

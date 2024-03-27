@@ -5,9 +5,9 @@ import { ITask } from "../../../interfaces/holiday";
 import { ModalTaskDetails } from "../../Modals/Task/ModalTaskDetails";
 import { ModalDelete } from "../ModalDelete";
 
-type props = ITask & { handleSelectTask: (event: React.ChangeEvent<HTMLInputElement>) => void, taskList: ITask[] };
+type props = ITask & { index: number, handleSelectTask: (event: React.ChangeEvent<HTMLInputElement>) => void, taskList: ITask[] };
 
-export function Task({ title, description, id, holiday_id, handleSelectTask, taskList }: props) {
+export function Task({ title, description, id, holiday_id, index, handleSelectTask, taskList }: props) {
     const [isModalDetailsOpen, setIsModalDetailsOpen] = useState(false);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [isVisualization, setIsVisualization] = useState(false);
@@ -18,12 +18,12 @@ export function Task({ title, description, id, holiday_id, handleSelectTask, tas
     }
 
     return (
-        <Flex cursor='pointer' p='5px' w='100%' justifyContent="space-between">
+        <Flex data-test={`task-${index}`} cursor='pointer' p='5px' w='100%' justifyContent="space-between">
             <Checkbox value={id} onChange={handleSelectTask} />
             <Text w='100%' textAlign='center' onClick={() => handleOpenVisualization(true)}>{title}</Text>
             <HStack spacing={1}>
-                <IoMdCreate onClick={() => handleOpenVisualization(false)} color='grey' size={25} />
-                <IoIosTrash onClick={() => setIsModalDeleteOpen(true)} color='red' size={25} />
+                <IoMdCreate data-test={`update-button-task-${index}`} onClick={() => handleOpenVisualization(false)} color='grey' size={25} />
+                <IoIosTrash data-test={`delete-button-task-${index}`} onClick={() => setIsModalDeleteOpen(true)} color='red' size={25} />
             </HStack>
             <ModalTaskDetails 
                 data={{ title, description, id, holiday_id }} 

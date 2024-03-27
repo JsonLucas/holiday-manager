@@ -90,8 +90,8 @@ export function Calendar({ previousHolidays }: props) {
                     </Flex>
                     <Flex alignItems='center' justifyContent='space-between'>
                         <Text mb='12px' mr='10px'>Is date range?</Text>
-                        <label className="toggle">
-                            <input data-test="toggle-range-date" type="checkbox" checked={isMultiple} onChange={() => setIsMultiple(!isMultiple)} />
+                        <label className="toggle" data-test="toggle-range-date">
+                            <input type="checkbox" checked={isMultiple} onChange={() => setIsMultiple(!isMultiple)} />
                             <span className="slider"></span>
                         </label>
                     </Flex>

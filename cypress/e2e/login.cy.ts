@@ -86,6 +86,34 @@ describe('Login page tests', () => {
       cy.get('@button-create-holiday-tasks').should("not.exist");
     });
 
+    it("Try to update a task for the created holiday", () => {
+      const hoje = new Date().toISOString().split("T")[0];
+      
+      cy.get(`[data-test="holiday-${hoje}"]`).as('holiday').should('exist').click();
+      cy.get(`[data-test='update-button-task-0'`).as('update-task-button').should('exist').click();
+  
+      cy.get('[data-test="update-task-title-input"]').as('title-input').should('exist');
+      cy.get('[data-test="update-task-description-input"]').as('description-input').should('exist');
+      cy.get('[data-test="button-update-task"]').as('button-update-task').should('exist');
+      
+      cy.get('@title-input').type('some updated title');
+      cy.get('@description-input').type('some updated description');
+      cy.get('@button-update-task').click();
+
+      cy.contains(/Task successfuly updated/i);
+      cy.get('@button-update-task').should("not.exist");
+    });
+
+    it("Try to delete a task for the created holiday", () => {
+      const hoje = new Date().toISOString().split("T")[0];
+      
+      cy.get(`[data-test="holiday-${hoje}"]`).as('holiday').should('exist').click();
+      cy.get(`[data-test='delete-button-task-0'`).as('delete-task-button').should('exist').click();
+      
+      cy.get(`[data-test="button-confirm-delete"]`).should('exist').click();
+      cy.contains(/Task successfuly deleted/i);
+    });
+
     it("Try to update a holiday", () => {
       const hoje = new Date().toISOString().split("T")[0];
       
@@ -112,6 +140,34 @@ describe('Login page tests', () => {
       cy.get(`[data-test="delete-holiday-icon-${hoje}"]`).should('exist').click();
       cy.get(`[data-test="button-confirm-delete"]`).should('exist').click();
       cy.contains(/Holiday successfuly deleted/i);
-    })
+    });
+
+    it("Try to create holidays in a range of dates", () => {
+      const amanha = new Date().setDate(new Date().getDate() + 1);
+      const formatedAmanha = new Date(amanha).toISOString().split("T")[0];
+
+      cy.get('[data-test="toggle-range-date"]').should('exist').click();
+      cy.get('[data-test="start-range-date"]').as("start-date");
+      cy.get('[data-test="end-range-date"]').as("end-date").should("be.enabled");
+
+      cy.get('@start-date').type(new Date().toISOString().split("T")[0]).trigger('change');
+      cy.get('@end-date').type(formatedAmanha).trigger('change');
+      cy.get('[data-test="button-open-modal-create-holiday"]').should('exist').click();
+
+      cy.get('[data-test="create-holiday-title-input-0"]').should('exist').type('some title 1');
+      cy.get('[data-test="create-holiday-description-input-0"]').should('exist').type('some description 1');
+      cy.get('#create-holiday-coordinates-input-0').should('exist').click();
+      
+      cy.get('[data-test="button-toggle-accordion-1"]').should('exist').click();
+      cy.get('[data-test="create-holiday-title-input-1"]').should('exist').type('some title 2');
+      cy.get('[data-test="create-holiday-description-input-1"]').should('exist').type('some description 2');
+      cy.get('#create-holiday-coordinates-input-1').should('exist').click();
+
+      cy.get('[data-test="button-create-holiday"]').as('button-create-holiday').should('exist');
+
+      cy.get('@button-create-holiday').click();
+      cy.contains(/Holiday successfuly created/i);
+      cy.get('@button-create-holiday').should("not.exist");
+    });
   });
 });

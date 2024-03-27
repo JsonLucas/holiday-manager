@@ -29,7 +29,7 @@ import moment from 'moment';
 import { ErrorLabel } from "../../ErrorLabel";
 
 export function ModalHolidayDetails({ isOpen, onClose, data, isVisualization = true }: ModalUpdateHolidayProps) {
-    const { tasks, refetchTasks, massExclude } = useTask(data.id);
+    const { massExclude } = useTask(data.id);
     const { update } = useHoliday();
     const [coordinates, setCoordinates] = useState<Coordinates>();
     const [massDeleteHidden, setMassDeleteHidden] = useState(true);
@@ -105,9 +105,8 @@ export function ModalHolidayDetails({ isOpen, onClose, data, isVisualization = t
     }
 
     useEffect(() => {
-        refetchTasks();
         setCoordinates(formatCoordinates(data.coordinates));
-    }, [isOpen, data, tasks]);
+    }, [isOpen]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size='xl' scrollBehavior="inside" motionPreset='slideInTop' isCentered>
@@ -133,8 +132,8 @@ export function ModalHolidayDetails({ isOpen, onClose, data, isVisualization = t
                         <Box w="100%" h="300px">
                             <Map
                                 mapId="c15d65ecf808cfe0"
-                                center={coordinates}
-                                zoom={10}
+                                defaultCenter={coordinates}
+                                defaultZoom={10}
                                 id={"update-holiday-coordinates-input"}
                                 onClick={(event) => setValue(`coordinates`, `${event.detail.latLng?.lat}, ${event.detail.latLng?.lng}`)}
                             >
@@ -143,15 +142,15 @@ export function ModalHolidayDetails({ isOpen, onClose, data, isVisualization = t
                         </Box>
                         <Input {...register('coordinates', { required: "You must to select a location." })} type='hidden' />
                         {errors.coordinates && <ErrorLabel error={errors.coordinates?.message ?? ""} />}
-                        {!tasks || (tasks && tasks.length === 0) && <Text textAlign='center' fontStyle='italic' fontSize='19px'>Task list is empty.</Text>}
-                        {tasks && tasks.length > 0 && <VStack w='100%' mt="20px" mb='20px'>
+                        {!data.tasks || (data.tasks && data.tasks.length === 0) && <Text textAlign='center' fontStyle='italic' fontSize='19px'>Task list is empty.</Text>}
+                        {data.tasks && data.tasks.length > 0 && <VStack w='100%' mt="20px" mb='20px'>
                             <Text textAlign='center' fontWeight='bold' fontSize='22px' mb='20px'>Tasks</Text>
                             <Flex hidden={massDeleteHidden} mb='10px' h='10px' w='100%' justifyContent='flex-start'>
                                 <IoIosTrash cursor='pointer' title='Delete Holiday' onClick={handleMassDelete} color='red' size={25} />
                             </Flex>
-                            {tasks.map((item: ITask) => <Task key={`${item.holiday_id}-${item.id}`} {...item} handleSelectTask={handleSelectTask} taskList={tasks} />)}
+                            {data.tasks.map((item: ITask, index: number) => <Task index={index} key={`${item.holiday_id}-${item.id}`} {...item} handleSelectTask={handleSelectTask} taskList={data.tasks} />)}
                         </VStack>}
-                        <CreateTask taskList={tasks} holiday_id={data.id} />
+                        <CreateTask taskList={data.tasks} holiday_id={data.id} />
                     </VStack>
                 </ModalBody>
                 {!isVisualization &&

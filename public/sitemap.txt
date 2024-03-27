@@ -1,0 +1,4 @@
+https://holiday-manager-six.vercel.app/
+https://holiday-manager-six.vercel.app/signup
+https://holiday-manager-six.vercel.app/forgot-password
+https://holiday-manager-six.vercel.app/home

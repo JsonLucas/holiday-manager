@@ -82,7 +82,7 @@ export function ModalCreateHoliday({ isOpen, onClose, dates }: ModalCreateHolida
                     <Accordion defaultIndex={[0]} allowMultiple>
                         {fields.map((item, index) =>
                             <AccordionItem key={item.id}>
-                                <AccordionButton textAlign='center'>
+                                <AccordionButton textAlign='center' data-test={`button-toggle-accordion-${index}`}>
                                     {moment(dates[index]).format('DD/MM/YYYY')}
                                 </AccordionButton>
                                 <AccordionPanel pb={4}>
@@ -91,7 +91,7 @@ export function ModalCreateHoliday({ isOpen, onClose, dates }: ModalCreateHolida
                                             {...register(`holidays[${index}].title`, { required: "A title is required." })} 
                                             data-test={`create-holiday-title-input-${index}`}
                                         />
-                                        {errors.holidays && Array.isArray(errors.holidays) && errors.holidays[index].title && <ErrorLabel error={errors.holidays[index].title.message} />}
+                                        {errors.holidays && Array.isArray(errors.holidays) && errors.holidays[index]?.title && <ErrorLabel error={errors.holidays[index].title.message} />}
                                         <Textarea 
                                             {...register(`holidays[${index}].description`)} 
                                             data-test={`create-holiday-description-input-${index}`}
@@ -102,7 +102,7 @@ export function ModalCreateHoliday({ isOpen, onClose, dates }: ModalCreateHolida
                                             <Map
                                                 mapId="c15d65ecf808cfe0"
                                                 defaultCenter={{ lat: 53.54, lng: 10 }}
-                                                zoom={10}
+                                                defaultZoom={10}
                                                 id={`create-holiday-coordinates-input-${index}`}
                                                 onClick={(event) => setValue(`holidays[${index}].coordinates`, `${event.detail.latLng?.lat}, ${event.detail.latLng?.lng}`)}
                                             >
@@ -113,7 +113,7 @@ export function ModalCreateHoliday({ isOpen, onClose, dates }: ModalCreateHolida
                                             {...register(`holidays[${index}].coordinates`, { required: "You must to select a location." })} 
                                             type='hidden' 
                                         />
-                                        {errors.holidays && Array.isArray(errors.holidays) && errors.holidays[index].coordinates && <ErrorLabel error={errors.holidays[index].coordinates.message} />}
+                                        {errors.holidays && Array.isArray(errors.holidays) && errors.holidays[index]?.coordinates && <ErrorLabel error={errors.holidays[index].coordinates.message} />}
                                     </VStack>
                                 </AccordionPanel>
                             </AccordionItem>
